@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
+  ArrowRight,
   BookOpenCheck,
   CheckCircle2,
   Clock3,
@@ -18,6 +19,7 @@ import {
   Sparkles,
   TimerReset,
   TriangleAlert,
+  UploadCloud,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site-header";
@@ -31,6 +33,30 @@ import { ParsePreview } from "./parse-preview";
 import styles from "./upload.module.css";
 
 type Phase = "idle" | "parsing" | "preview";
+
+const STATS = [
+  { value: "14", label: "dạng câu hỏi" },
+  { value: "20'", label: "mỗi passage" },
+  { value: "3", label: "passages mỗi đề" },
+  { value: "100%", label: "xử lý trên máy" },
+];
+
+const QUESTION_TYPES = [
+  "Multiple choice",
+  "True / False / Not Given",
+  "Yes / No / Not Given",
+  "Matching headings",
+  "Matching information",
+  "Matching features",
+  "Matching sentence endings",
+  "Sentence completion",
+  "Summary completion",
+  "Notes completion",
+  "Table completion",
+  "Diagram labelling",
+  "Short answer",
+  "Chọn nhiều đáp án",
+];
 
 export function UploadScreen() {
   const router = useRouter();
@@ -101,161 +127,181 @@ export function UploadScreen() {
       <SiteHeader active="home" />
       <main>
         <section className={styles.hero}>
-          <div className={`page-shell ${styles.heroInner}`}>
-            <div className={styles.heroCopy}>
-              <div className={styles.eyebrow}>
-                <span />
-                IELTS Reading · Computer-based
-              </div>
-              <h1>
-                Luyện Reading
-                <br />
-                như thi thật.
-              </h1>
-              <p className={styles.lede}>
-                Tải file Word hoặc PDF của bạn lên. Hệ thống tự nhận diện passage, câu hỏi và
-                đáp án — kể cả PDF nhiều cột hoặc file scan — rồi dựng thành bài thi IELTS
-                trên máy tính.
-              </p>
+          <div className="page-shell">
+            <div className={styles.heroCard}>
+              <span className={styles.heroGlowA} aria-hidden="true" />
+              <span className={styles.heroGlowB} aria-hidden="true" />
+              <span className={styles.heroGrid} aria-hidden="true" />
 
-              <div className={styles.heroPoints}>
-                <div>
-                  <CheckCircle2 size={17} />
-                  <span>Hỗ trợ Word, PDF & OCR scan</span>
+              <div className={styles.heroCopy}>
+                <div className={styles.eyebrow}>
+                  <span className={styles.eyebrowDot} />
+                  IELTS Reading · Computer-based
                 </div>
-                <div>
-                  <CheckCircle2 size={17} />
-                  <span>Chấm điểm tự động</span>
-                </div>
-                <div>
-                  <CheckCircle2 size={17} />
-                  <span>Lưu lịch sử trên máy</span>
-                </div>
-              </div>
+                <h1>
+                  Luyện Reading
+                  <br />
+                  <span className={styles.heroAccent}>như thi thật.</span>
+                </h1>
+                <p className={styles.lede}>
+                  Tải file Word hoặc PDF của bạn lên. Hệ thống tự nhận diện passage, câu hỏi và
+                  đáp án — kể cả PDF nhiều cột hoặc file scan — rồi dựng thành bài thi IELTS
+                  trên máy tính.
+                </p>
 
-              <div className={styles.heroMeta}>
-                <div className={styles.heroMetaItem}>
-                  <BookOpenCheck size={18} />
-                  <span>
-                    <strong>3 passages</strong>
-                    60 phút
-                  </span>
+                <div className={styles.heroActions}>
+                  <a className={styles.primaryCta} href="#bat-dau">
+                    <UploadCloud size={18} strokeWidth={2.1} />
+                    Tải file của bạn
+                  </a>
+                  <a
+                    className={styles.ghostCta}
+                    href="/samples/ielts-reading-demo.docx"
+                    download
+                  >
+                    <Download size={16} />
+                    Bài mẫu
+                  </a>
                 </div>
-                <div className={styles.heroMetaItem}>
-                  <Clock3 size={18} />
-                  <span>
-                    <strong>Tự tính giờ</strong>
-                    Theo số passage
-                  </span>
-                </div>
-                <div className={styles.heroMetaItem}>
-                  <Highlighter size={18} />
-                  <span>
-                    <strong>Highlight</strong>
-                    & ghi chú
-                  </span>
-                </div>
-              </div>
-            </div>
 
-            <div className={styles.uploadPanel}>
-              <div className={styles.panelTop}>
-                <div>
-                  <span className={styles.panelKicker}>Bắt đầu</span>
-                  <h2>Tạo bài thi từ Word / PDF</h2>
-                </div>
-                <span className={styles.panelBadge}>
-                  <LockKeyhole size={13} />
-                  Word · PDF
-                </span>
+                <ul className={styles.heroPoints}>
+                  <li>
+                    <CheckCircle2 size={16} />
+                    Word, PDF &amp; OCR scan
+                  </li>
+                  <li>
+                    <CheckCircle2 size={16} />
+                    Chấm điểm tự động
+                  </li>
+                  <li>
+                    <CheckCircle2 size={16} />
+                    Lưu lịch sử trên máy
+                  </li>
+                </ul>
               </div>
 
-              {hasActiveExam && (
-                <div className={styles.resumeCard}>
-                  <div className={styles.resumeIcon}>
-                    <PlayCircle size={20} />
-                  </div>
-                  <div className={styles.resumeInfo}>
-                    <strong>Bạn có bài đang làm</strong>
-                    <span>
-                      {currentTest.fileName} · {formatDuration(durationSeconds)}
+              <div className={styles.heroPanelWrap}>
+                <div className={`${styles.floatChip} ${styles.floatChipTop}`}>
+                  <Clock3 size={14} />
+                  20 phút mỗi passage
+                </div>
+
+                <div className={styles.uploadPanel} id="bat-dau">
+                  <div className={styles.panelTop}>
+                    <div>
+                      <span className={styles.panelKicker}>Bắt đầu</span>
+                      <h2>Tạo bài thi từ Word / PDF</h2>
+                    </div>
+                    <span className={styles.panelBadge}>
+                      <LockKeyhole size={13} />
+                      Word · PDF
                     </span>
                   </div>
-                  <Button size="sm" onClick={() => router.push("/exam")}>
-                    Tiếp tục
-                  </Button>
-                </div>
-              )}
 
-              {hydrated && currentTest && submittedAt && (
-                <div className={styles.submittedCard}>
-                  <div className={styles.submittedIcon}>
-                    <CheckCircle2 size={19} />
-                  </div>
-                  <div>
-                    <strong>Bài gần nhất đã nộp: {currentScore}/{currentTotal}</strong>
-                    <span>Xem lại đáp án hoặc mở lịch sử.</span>
-                  </div>
-                  <div className={styles.submittedActions}>
-                    <button onClick={() => router.push("/review")}>Xem lại</button>
-                    <button onClick={() => router.push("/history")}>
-                      <History size={14} />
-                      Lịch sử
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {phase === "parsing" && (
-                <div className={styles.parsing}>
-                  <div className={styles.parsingIcon}>
-                    <Loader2 size={26} className={styles.spin} />
-                  </div>
-                  <strong>
-                    {stage === "ocr"
-                      ? "Đang nhận dạng chữ (OCR) từ file PDF scan..."
-                      : "Đang đọc cấu trúc bài thi..."}
-                  </strong>
-                  <span>
-                    {stage === "ocr"
-                      ? "Trích xuất văn bản, câu hỏi và đáp án từ các trang ảnh."
-                      : "Nhận diện passage, câu hỏi, dạng câu và đáp án."}
-                  </span>
-                  <div className={styles.parsingBar}>
-                    <span />
-                  </div>
-                </div>
-              )}
-
-              {phase === "idle" && (
-                <>
-                  <Dropzone onFile={handleFile} disabled={!hydrated} />
-                  {error && (
-                    <div className={styles.error} role="alert">
-                      <TriangleAlert size={17} />
-                      <span>{error}</span>
+                  {hasActiveExam && (
+                    <div className={styles.resumeCard}>
+                      <div className={styles.resumeIcon}>
+                        <PlayCircle size={20} />
+                      </div>
+                      <div className={styles.resumeInfo}>
+                        <strong>Bạn có bài đang làm</strong>
+                        <span>
+                          {currentTest.fileName} · {formatDuration(durationSeconds)}
+                        </span>
+                      </div>
+                      <Button size="sm" onClick={() => router.push("/exam")}>
+                        Tiếp tục
+                      </Button>
                     </div>
                   )}
-                  <div className={styles.panelFoot}>
-                    <span>Chưa có file? </span>
-                    <a href="/samples/ielts-reading-demo.docx" download>
-                      <Download size={14} />
-                      Tải bài mẫu
-                    </a>
-                  </div>
-                </>
-              )}
 
-              {phase === "preview" && parsed && (
-                <ParsePreview
-                  test={parsed}
-                  selectedIds={selectedIds}
-                  onToggle={togglePassage}
-                  onStart={start}
-                  onReset={reset}
-                />
-              )}
+                  {hydrated && currentTest && submittedAt && (
+                    <div className={styles.submittedCard}>
+                      <div className={styles.submittedIcon}>
+                        <CheckCircle2 size={19} />
+                      </div>
+                      <div>
+                        <strong>
+                          Bài gần nhất đã nộp: {currentScore}/{currentTotal}
+                        </strong>
+                        <span>Xem lại đáp án hoặc mở lịch sử.</span>
+                      </div>
+                      <div className={styles.submittedActions}>
+                        <button onClick={() => router.push("/review")}>Xem lại</button>
+                        <button onClick={() => router.push("/history")}>
+                          <History size={14} />
+                          Lịch sử
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {phase === "parsing" && (
+                    <div className={styles.parsing}>
+                      <div className={styles.parsingIcon}>
+                        <Loader2 size={26} className={styles.spin} />
+                      </div>
+                      <strong>
+                        {stage === "ocr"
+                          ? "Đang nhận dạng chữ (OCR) từ file PDF scan..."
+                          : "Đang đọc cấu trúc bài thi..."}
+                      </strong>
+                      <span>
+                        {stage === "ocr"
+                          ? "Trích xuất văn bản, câu hỏi và đáp án từ các trang ảnh."
+                          : "Nhận diện passage, câu hỏi, dạng câu và đáp án."}
+                      </span>
+                      <div className={styles.parsingBar}>
+                        <span />
+                      </div>
+                    </div>
+                  )}
+
+                  {phase === "idle" && (
+                    <>
+                      <Dropzone onFile={handleFile} disabled={!hydrated} />
+                      {error && (
+                        <div className={styles.error} role="alert">
+                          <TriangleAlert size={17} />
+                          <span>{error}</span>
+                        </div>
+                      )}
+                      <div className={styles.panelFoot}>
+                        <span>Chưa có file? </span>
+                        <a href="/samples/ielts-reading-demo.docx" download>
+                          <Download size={14} />
+                          Tải bài mẫu
+                        </a>
+                      </div>
+                    </>
+                  )}
+
+                  {phase === "preview" && parsed && (
+                    <ParsePreview
+                      test={parsed}
+                      selectedIds={selectedIds}
+                      onToggle={togglePassage}
+                      onStart={start}
+                      onReset={reset}
+                    />
+                  )}
+                </div>
+
+                <div className={`${styles.floatChip} ${styles.floatChipBottom}`}>
+                  <ShieldCheck size={14} />
+                  Chạy trên máy bạn
+                </div>
+              </div>
             </div>
+
+            <dl className={styles.statBand}>
+              {STATS.map((stat) => (
+                <div key={stat.label}>
+                  <dt>{stat.label}</dt>
+                  <dd>{stat.value}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </section>
 
@@ -304,27 +350,58 @@ export function UploadScreen() {
           </div>
         </section>
 
+        <section className={styles.typeSection}>
+          <div className={`page-shell ${styles.typeInner}`}>
+            <div className={styles.typeHead}>
+              <span className={styles.panelKicker}>Nhận diện tự động</span>
+              <h2>14 dạng câu hỏi IELTS Reading</h2>
+              <p>
+                Từ True/False/Not Given đến matching headings hay điền bảng — parser đọc đúng
+                cấu trúc để bạn không phải nhập lại đề.
+              </p>
+            </div>
+            <ul className={styles.typeChips}>
+              {QUESTION_TYPES.map((type) => (
+                <li key={type}>{type}</li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
         <section className={styles.howSection}>
           <div className={`page-shell ${styles.howInner}`}>
             <div className={styles.howHead}>
               <span className={styles.panelKicker}>Quy trình</span>
               <h2>Ba bước để bắt đầu bài thi</h2>
               <p>Không cần cài đặt. Hỗ trợ cả file văn bản và PDF ảnh scan.</p>
+              <a className={styles.howLink} href="#bat-dau">
+                Bắt đầu ngay
+                <ArrowRight size={15} />
+              </a>
             </div>
             <div className={styles.steps}>
               <div className={styles.step}>
-                <span>01</span>
+                <span className={styles.stepNumber}>01</span>
+                <div className={styles.stepIcon}>
+                  <UploadCloud size={18} />
+                </div>
                 <h3>Tải file Word / PDF</h3>
                 <p>Hỗ trợ .docx, .doc và .pdf (tự sắp xếp cột, hỗ trợ OCR cho PDF scan).</p>
               </div>
               <div className={styles.step}>
-                <span>02</span>
+                <span className={styles.stepNumber}>02</span>
+                <div className={styles.stepIcon}>
+                  <BookOpenCheck size={18} />
+                </div>
                 <h3>Kiểm tra cấu trúc</h3>
                 <p>Xem số passage, câu hỏi, đáp án và chọn phần sẽ làm nếu cần.</p>
               </div>
               <div className={styles.step}>
-                <span>03</span>
-                <h3>Làm bài & chấm</h3>
+                <span className={styles.stepNumber}>03</span>
+                <div className={styles.stepIcon}>
+                  <Highlighter size={18} />
+                </div>
+                <h3>Làm bài &amp; chấm</h3>
                 <p>Hết giờ tự nộp. Có đáp án thì chấm ngay; không có thì tự chấm trong Review.</p>
               </div>
             </div>
