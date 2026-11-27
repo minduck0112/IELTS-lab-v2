@@ -1,0 +1,8 @@
+{
+  "name": "IELTS Reading Lab",
+  "description": "Tải file .doc, .docx hoặc .pdf (bao gồm PDF scan qua OCR), chuyển bài IELTS Reading thành bài thi computer-based với highlight, ghi chú, chấm điểm và lưu lịch sử.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

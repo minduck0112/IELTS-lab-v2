@@ -1,0 +1,52 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  line-height: 1;
+}
+
+.text {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  line-height: 1;
+}
+
+.wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  font-family: "Helvetica Neue", Arial, var(--font-sans);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.ieltsMark {
+  color: #e31837;
+  font-family: inherit;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+.labMark {
+  color: var(--navy-deep);
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+
+.logoExam .examWordmark {
+  gap: 5px;
+}
+
+.logoExam .ieltsMark {
+  font-size: 21px;
+}
+
+.logoExam .labMark {
+  font-size: 17.5px;
+}

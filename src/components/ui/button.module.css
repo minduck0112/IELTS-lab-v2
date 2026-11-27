@@ -1,0 +1,129 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease,
+    box-shadow 140ms ease,
+    transform 140ms ease;
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.button svg {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+}
+
+.primary {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+  box-shadow: 0 1px 1px rgba(13, 35, 55, 0.12);
+}
+
+.primary:hover:not(:disabled) {
+  background: var(--navy-deep);
+  border-color: var(--navy-deep);
+}
+
+.secondary {
+  background: #fff;
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+.secondary:hover:not(:disabled) {
+  border-color: var(--navy);
+  background: var(--surface-muted);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--ink-soft);
+}
+
+.ghost:hover:not(:disabled) {
+  background: rgba(21, 50, 76, 0.07);
+}
+
+.danger {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+
+.danger:hover:not(:disabled) {
+  background: #8f1b13;
+  border-color: #8f1b13;
+}
+
+.dark {
+  background: #fff;
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+.dark:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.outline {
+  background: transparent;
+  border-color: var(--line-strong);
+  color: var(--ink-soft);
+}
+
+.outline:hover:not(:disabled) {
+  border-color: var(--navy);
+  color: var(--navy);
+}
+
+.sm {
+  min-height: 34px;
+  padding: 0 12px;
+  font-size: 13px;
+}
+
+.md {
+  min-height: 42px;
+  padding: 0 18px;
+  font-size: 14px;
+}
+
+.lg {
+  min-height: 50px;
+  padding: 0 24px;
+  font-size: 15px;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 700ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
